@@ -1,0 +1,28 @@
+services:
+  s3:
+    image: seoly0/nanoio:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: nanoio
+    ports:
+      - "9000:9000"     # S3 REST API
+      # - "9001:9001"   # Web Console Dashboard (현재 비활성화)
+    environment:
+      - NANOIO_HOST=0.0.0.0
+      - NANOIO_PORT=9000
+      # - NANOIO_CONSOLE_PORT=9001
+      - NANOIO_NO_CONSOLE=true
+      - NANOIO_DATA_DIR=/data
+      - NANOIO_AUTH_MODE=strict            # strict (차단) 또는 permissive (Pass-through)
+      - NANOIO_ACCESS_KEY_ID=<YOUR_ACCESS_KEY>      # Root Access Key (Change this)
+      - NANOIO_SECRET_ACCESS_KEY=<YOUR_SECRET_KEY>  # Root Secret Key (Change this)
+      # 시작 시 자동 생성할 기본 버킷 (선택 사항, 쉼표로 다중 지정 가능):
+      # - NANOIO_DEFAULT_BUCKET=default-bucket
+      # 다중 IAM 사용자 추가 예시 (선택 사항):
+      - NANOIO_IAM_USERS=reader:reader123:readonly,developer:dev123:readwrite
+      - RUST_LOG=info
+    volumes:
+      - ./data:/data
+    restart: unless-stopped
+

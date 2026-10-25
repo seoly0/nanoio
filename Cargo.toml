@@ -1,0 +1,5 @@
+[workspace]
+members = [
+    "nanoio-server",
+]
+resolver = "2"
